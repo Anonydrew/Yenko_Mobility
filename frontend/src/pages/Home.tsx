@@ -2,27 +2,18 @@ import { Link } from 'react-router-dom';
 import BlogTeaser from '@/components/sections/BlogTeaser';
 import CampusGrid from '@/components/sections/CampusGrid';
 import CtaBanner from '@/components/sections/CtaBanner';
-import FeatureGrid from '@/components/sections/FeatureGrid';
+import HomeServices from '@/components/sections/HomeServices';
 import HowItWorksCarousel from '@/components/sections/HowItWorksCarousel';
-import ServiceGrid from '@/components/sections/ServiceGrid';
 import SplitFeature from '@/components/sections/SplitFeature';
 import StatsBand from '@/components/sections/StatsBand';
 import SuperAppHero from '@/components/sections/SuperAppHero';
 import ArrowOutward from '@/components/ui/ArrowOutward';
 import Button from '@/components/ui/Button';
-import { LeafIcon, PhoneIcon, ShieldIcon, WalletIcon } from '@/components/ui/icons';
 import Section from '@/components/ui/Section';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { totalBikes, totalZones } from '@/content/locations';
 import { media } from '@/content/media';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-
-const features = [
-  { icon: LeafIcon, title: 'Electric by default', text: 'E-bikes and electric vehicles, swappable batteries and solar charging. Zero tailpipe emissions.' },
-  { icon: WalletIcon, title: 'Priced for Ghana', text: 'Pay with MoMo from GH₵ 2, or save with passes, business plans and rent-to-own.' },
-  { icon: ShieldIcon, title: 'Safe by design', text: 'Verified riders and drivers, well-maintained vehicles and 24/7 support on every trip.' },
-  { icon: PhoneIcon, title: 'One app for everything', text: 'Ride, send a parcel, manage your team or pay off your e-bike, all in the same app.' },
-];
 
 export default function Home() {
   useDocumentTitle();
@@ -31,29 +22,11 @@ export default function Home() {
     <>
       <SuperAppHero />
 
-      {/* Services */}
-      <Section>
-        <SectionHeading
-          eyebrow="Our services"
-          title="Every way you move, in one app."
-          action={
-            <Button to="/pricing" variant="secondary">
-              See pricing
-            </Button>
-          }
-        />
-        <ServiceGrid />
-      </Section>
-
-      <HowItWorksCarousel />
-
-      {/* Why Yenko */}
-      <Section>
-        <SectionHeading eyebrow="Why Yenko" title="Built for Ghana, not someone else’s city." />
-        <div className="mt-12">
-          <FeatureGrid features={features} columns={4} />
-        </div>
-      </Section>
+      {/* Services and How it works share a white band */}
+      <div className="bg-white py-8 text-onbrand sm:py-12">
+        <HomeServices />
+        <HowItWorksCarousel />
+      </div>
 
       <StatsBand
         eyebrow="Yenko so far"
