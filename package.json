@@ -1,0 +1,14 @@
+{
+  "name": "yenko-mobility",
+  "private": true,
+  "description": "Yenko Mobility website, blog and admin panel",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "node scripts/dev.mjs",
+    "build": "npm --prefix frontend run build",
+    "package": "node scripts/package.mjs"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

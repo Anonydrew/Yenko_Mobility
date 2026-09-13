@@ -1,0 +1,123 @@
+# Builds the site on every push to main and uploads it to Hostinger over FTP.
+# Setup (secrets, variables, first run on the server) is described in DEPLOYMENT.md.
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deployments at the same time.
+concurrency:
+  group: hostinger-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and upload
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      VITE_ADMIN_PATH: ${{ vars.VITE_ADMIN_PATH || '/login-yenkoadmin' }}
+
+    steps:
+      - name: Check the FTP secrets are set
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          missing=""
+          [ -n "$FTP_SERVER" ] || missing="$missing FTP_SERVER"
+          [ -n "$FTP_USERNAME" ] || missing="$missing FTP_USERNAME"
+          [ -n "$FTP_PASSWORD" ] || missing="$missing FTP_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::Add these repository secrets in Settings > Secrets and variables > Actions:$missing"
+            exit 1
+          fi
+
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, fileinfo, pdo_sqlite, pdo_mysql
+          tools: composer:v2
+          coverage: none
+
+      - name: Install website packages
+        working-directory: frontend
+        run: npm ci
+
+      - name: Check PHP syntax
+        run: |
+          for file in $(find backend/src backend/public backend/database -name '*.php'); do
+            php -l "$file" > /dev/null || { php -l "$file"; exit 1; }
+          done
+
+      - name: Build the deploy package
+        run: node scripts/package.mjs
+
+      - name: Check the default pricing file
+        run: |
+          php -r 'require "backend/src/bootstrap.php"; Yenko\Controllers\PricingController::defaults(); echo "Default pricing is valid", PHP_EOL;'
+
+      # Only files this workflow uploaded before are ever replaced or removed, so the server's
+      # .env, database and uploaded images are left alone.
+      - name: Upload the website
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftp' }}
+          port: ${{ vars.FTP_PORT || 21 }}
+          local-dir: deploy/public_html/
+          server-dir: ${{ vars.FTP_WEB_DIR || 'public_html/' }}
+          state-name: .ftp-deploy-website.json
+          timeout: 120000
+
+      - name: Upload the backend
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftp' }}
+          port: ${{ vars.FTP_PORT || 21 }}
+          local-dir: deploy/yenko-backend/
+          server-dir: ${{ vars.FTP_BACKEND_DIR || 'yenko-backend/' }}
+          state-name: .ftp-deploy-backend.json
+          timeout: 120000
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .env
+            database/*.sqlite
+            database/*.sqlite-*
+
+      # Optional: runs only when the SSH_HOST variable is set. Creates any new database tables.
+      - name: Update the database
+        if: ${{ vars.SSH_HOST != '' }}
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ vars.SSH_HOST }}
+          port: ${{ vars.SSH_PORT || 65002 }}
+          username: ${{ vars.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            set -e
+            cd "${{ vars.SSH_BACKEND_PATH }}"
+            php database/migrate.php

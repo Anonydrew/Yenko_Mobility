@@ -1,0 +1,364 @@
+{
+  "currency": "GH₵",
+  "tabs": [
+    {
+      "id": "rides",
+      "label": "Rides",
+      "title": "Campus e-bikes and shared rides",
+      "description": "Pay per ride, or save with a pass.",
+      "footnote": "",
+      "billing": [],
+      "plans": [
+        {
+          "id": "pay-as-you-go",
+          "name": "Pay as you go",
+          "description": "For the occasional trip. No commitment.",
+          "popular": false,
+          "ctaLabel": "Download the app",
+          "ctaLink": "/download",
+          "featuresTitle": "Includes:",
+          "features": ["Campus e-bikes on every Yenko campus", "Pay per ride with MoMo or card", "Ride for as long as you need", "24/7 in-app support"],
+          "prices": {
+            "default": { "amount": 2, "customLabel": "", "period": "to unlock", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": 0.5, "extraUnit": "min", "note": "" }
+          }
+        },
+        {
+          "id": "day-pass",
+          "name": "Day Pass",
+          "description": "For busy days with back-to-back plans.",
+          "popular": false,
+          "ctaLabel": "Download the app",
+          "ctaLink": "/download",
+          "featuresTitle": "Everything in Pay as you go, plus:",
+          "features": ["Unlimited e-bike rides for 24 hours", "No unlock fee", "Works on every Yenko campus"],
+          "prices": {
+            "default": { "amount": 25, "customLabel": "", "period": "/day", "includedQuantity": 45, "includedUnit": "min", "includedPer": "per ride", "extraRate": 0.3, "extraUnit": "min", "note": "Valid for 24 hours" }
+          }
+        },
+        {
+          "id": "semester-pass",
+          "name": "Semester Pass",
+          "description": "Unlimited campus riding for verified students.",
+          "popular": true,
+          "ctaLabel": "Get the Semester Pass",
+          "ctaLink": "/download",
+          "featuresTitle": "Everything in Day Pass, plus:",
+          "features": ["Unlimited rides all semester", "10% off shared rides", "Free Yenko helmet", "Pause for internships or medical leave"],
+          "prices": {
+            "default": { "amount": 250, "customLabel": "", "period": "/semester", "includedQuantity": 45, "includedUnit": "min", "includedPer": "per ride", "extraRate": 0.3, "extraUnit": "min", "note": "Or two payments of GH₵ 125" }
+          }
+        },
+        {
+          "id": "shared-rides",
+          "name": "Shared rides",
+          "description": "Split the cost of a city ride with people going your way.",
+          "popular": false,
+          "ctaLabel": "Download the app",
+          "ctaLink": "/download",
+          "featuresTitle": "Includes:",
+          "features": ["Fixed seat price, no surge pricing", "Verified drivers and live trip sharing", "Pick-ups close to you", "Fully electric vehicles"],
+          "prices": {
+            "default": { "amount": 8, "customLabel": "", "period": "/seat", "includedQuantity": 5, "includedUnit": "km", "includedPer": "", "extraRate": 1.2, "extraUnit": "km", "note": "Final price shown before you book" }
+          }
+        }
+      ],
+      "compare": [
+        {
+          "title": "Campus e-bikes",
+          "rows": [
+            { "label": "Free helmet", "values": [false, false, true, false] },
+            { "label": "Works on every campus", "values": [true, true, true, false] }
+          ]
+        },
+        {
+          "title": "Shared rides",
+          "rows": [
+            { "label": "Shared ride discount", "values": [false, false, "10% off", false] },
+            { "label": "Live trip sharing", "values": [true, true, true, true] }
+          ]
+        },
+        {
+          "title": "Payments and support",
+          "rows": [
+            { "label": "MoMo and debit cards", "values": [true, true, true, true] },
+            { "label": "Split payments", "values": [false, false, true, false] },
+            { "label": "24/7 in-app support", "values": [true, true, true, true] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delivery",
+      "label": "Delivery",
+      "title": "Yenko Delivery",
+      "description": "Send one parcel, or run all your business deliveries.",
+      "footnote": "",
+      "billing": [
+        { "id": "monthly", "label": "Billed monthly", "badge": "" },
+        { "id": "yearly", "label": "Billed yearly", "badge": "Save 15%" }
+      ],
+      "plans": [
+        {
+          "id": "single",
+          "name": "Send a parcel",
+          "description": "One-off deliveries for individuals.",
+          "popular": false,
+          "ctaLabel": "Download the app",
+          "ctaLink": "/download",
+          "featuresTitle": "Includes:",
+          "features": ["Same-day delivery", "Live tracking", "Parcels up to 15 kg", "Proof of delivery photo"],
+          "prices": {
+            "monthly": { "amount": 10, "customLabel": "", "period": "/delivery", "includedQuantity": 5, "includedUnit": "km", "includedPer": "", "extraRate": 1.5, "extraUnit": "km", "note": "" },
+            "yearly": { "amount": 10, "customLabel": "", "period": "/delivery", "includedQuantity": 5, "includedUnit": "km", "includedPer": "", "extraRate": 1.5, "extraUnit": "km", "note": "" }
+          }
+        },
+        {
+          "id": "starter",
+          "name": "Business Starter",
+          "description": "For shops and small online sellers.",
+          "popular": false,
+          "ctaLabel": "Get started",
+          "ctaLink": "/contact?topic=partnerships",
+          "featuresTitle": "Everything in Send a parcel, plus:",
+          "features": ["Scheduled pick-ups", "Monthly invoicing", "Business dashboard"],
+          "prices": {
+            "monthly": { "amount": 450, "customLabel": "", "period": "/month", "includedQuantity": 50, "includedUnit": "delivery", "includedPer": "per month", "extraRate": 9, "extraUnit": "delivery", "note": "Billed monthly" },
+            "yearly": { "amount": 380, "customLabel": "", "period": "/month", "includedQuantity": 50, "includedUnit": "delivery", "includedPer": "per month", "extraRate": 9, "extraUnit": "delivery", "note": "Billed yearly" }
+          }
+        },
+        {
+          "id": "growth",
+          "name": "Business Growth",
+          "description": "For busy restaurants, pharmacies and online brands.",
+          "popular": true,
+          "ctaLabel": "Get started",
+          "ctaLink": "/contact?topic=partnerships",
+          "featuresTitle": "Everything in Starter, plus:",
+          "features": ["Bulk order upload", "Priority riders at peak times", "Cash-on-delivery collection"],
+          "prices": {
+            "monthly": { "amount": 1600, "customLabel": "", "period": "/month", "includedQuantity": 200, "includedUnit": "delivery", "includedPer": "per month", "extraRate": 8, "extraUnit": "delivery", "note": "Billed monthly" },
+            "yearly": { "amount": 1360, "customLabel": "", "period": "/month", "includedQuantity": 200, "includedUnit": "delivery", "includedPer": "per month", "extraRate": 8, "extraUnit": "delivery", "note": "Billed yearly" }
+          }
+        },
+        {
+          "id": "enterprise",
+          "name": "Enterprise",
+          "description": "For high volumes and custom workflows.",
+          "popular": false,
+          "ctaLabel": "Talk to sales",
+          "ctaLink": "/contact?topic=partnerships",
+          "featuresTitle": "Everything in Growth, plus:",
+          "features": ["Unlimited deliveries", "Dedicated account manager", "API integration", "Custom service levels"],
+          "prices": {
+            "monthly": { "amount": null, "customLabel": "Custom", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Volume pricing" },
+            "yearly": { "amount": null, "customLabel": "Custom", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Volume pricing" }
+          }
+        }
+      ],
+      "compare": [
+        {
+          "title": "Deliveries",
+          "rows": [
+            { "label": "Same-day delivery", "values": [true, true, true, true] },
+            { "label": "Scheduled pick-ups", "values": [false, true, true, true] },
+            { "label": "Cash-on-delivery collection", "values": [false, false, true, true] }
+          ]
+        },
+        {
+          "title": "Tools",
+          "rows": [
+            { "label": "Live tracking", "values": [true, true, true, true] },
+            { "label": "Business dashboard", "values": [false, true, true, true] },
+            { "label": "Bulk order upload", "values": [false, false, true, true] },
+            { "label": "API integration", "values": [false, false, false, true] }
+          ]
+        },
+        {
+          "title": "Billing and support",
+          "rows": [
+            { "label": "Monthly invoicing", "values": [false, true, true, true] },
+            { "label": "Dedicated account manager", "values": [false, false, false, true] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rent-to-own",
+      "label": "Rent to own",
+      "title": "Yenko Rent to Own",
+      "description": "Ride from day one and own your e-bike at the end of your plan.",
+      "footnote": "Applicants need a valid Ghana Card, to be 18 or over, and a guarantor.",
+      "billing": [
+        { "id": "weekly", "label": "Pay weekly", "badge": "" },
+        { "id": "monthly", "label": "Pay monthly", "badge": "Save 8%" }
+      ],
+      "plans": [
+        {
+          "id": "commuter",
+          "name": "E1 Commuter",
+          "description": "Our campus-proven e-bike for daily commuting.",
+          "popular": false,
+          "ctaLabel": "Apply now",
+          "ctaLink": "/contact?topic=general",
+          "featuresTitle": "Includes:",
+          "features": ["Yenko E1 e-bike and charger", "Servicing at any Yenko hub", "Theft and damage insurance", "Yours after 12 months"],
+          "prices": {
+            "weekly": { "amount": 150, "customLabel": "", "period": "/week", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "52 weekly payments" },
+            "monthly": { "amount": 600, "customLabel": "", "period": "/month", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "12 monthly payments" }
+          }
+        },
+        {
+          "id": "cargo",
+          "name": "E1 Cargo",
+          "description": "Built for delivery riders, with a lockable cargo box.",
+          "popular": true,
+          "ctaLabel": "Apply now",
+          "ctaLink": "/contact?topic=general",
+          "featuresTitle": "Everything in Commuter, plus:",
+          "features": ["Lockable 60-litre cargo box", "Spare battery for long shifts", "Priority repairs", "Option to deliver with Yenko"],
+          "prices": {
+            "weekly": { "amount": 210, "customLabel": "", "period": "/week", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "52 weekly payments" },
+            "monthly": { "amount": 840, "customLabel": "", "period": "/month", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "12 monthly payments" }
+          }
+        },
+        {
+          "id": "fleet",
+          "name": "Fleet",
+          "description": "Five or more e-bikes for businesses and rider groups.",
+          "popular": false,
+          "ctaLabel": "Talk to sales",
+          "ctaLink": "/contact?topic=partnerships",
+          "featuresTitle": "Everything in Cargo, plus:",
+          "features": ["Flexible 12 to 24 month plans", "Fleet tracking dashboard", "Branded bikes", "Dedicated account manager"],
+          "prices": {
+            "weekly": { "amount": null, "customLabel": "Custom", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Volume discounts" },
+            "monthly": { "amount": null, "customLabel": "Custom", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Volume discounts" }
+          }
+        }
+      ],
+      "compare": [
+        {
+          "title": "Your plan",
+          "rows": [
+            { "label": "Deposit", "values": ["GH₵ 1,000", "GH₵ 1,500", "Custom"] },
+            { "label": "Plan length", "values": ["12 months", "12 months", "12 to 24 months"] },
+            { "label": "You own the bike at the end", "values": [true, true, true] }
+          ]
+        },
+        {
+          "title": "Included",
+          "rows": [
+            { "label": "Servicing at Yenko hubs", "values": [true, true, true] },
+            { "label": "Theft and damage insurance", "values": [true, true, true] },
+            { "label": "Spare battery", "values": [false, true, true] },
+            { "label": "Cargo box", "values": [false, true, "Optional"] },
+            { "label": "Fleet tracking dashboard", "values": [false, false, true] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "business",
+      "label": "Business",
+      "title": "Yenko Corporate and Yenko for Business",
+      "description": "Mobility for your team, or your own Yenko franchise.",
+      "footnote": "",
+      "billing": [
+        { "id": "monthly", "label": "Billed monthly", "badge": "" },
+        { "id": "yearly", "label": "Billed yearly", "badge": "Save 15%" }
+      ],
+      "plans": [
+        {
+          "id": "team",
+          "name": "Corporate Team",
+          "description": "For offices and teams of up to 25 people.",
+          "popular": false,
+          "ctaLabel": "Get started",
+          "ctaLink": "/contact?topic=partnerships",
+          "featuresTitle": "Includes:",
+          "features": ["Up to 25 staff accounts", "GH₵ 2,000 ride and delivery credit each month", "One monthly invoice", "Usage dashboard"],
+          "prices": {
+            "monthly": { "amount": 2500, "customLabel": "", "period": "/month", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Billed monthly" },
+            "yearly": { "amount": 2125, "customLabel": "", "period": "/month", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Billed yearly" }
+          }
+        },
+        {
+          "id": "plus",
+          "name": "Corporate Plus",
+          "description": "For growing companies that need staff shuttles.",
+          "popular": true,
+          "ctaLabel": "Get started",
+          "ctaLink": "/contact?topic=partnerships",
+          "featuresTitle": "Everything in Team, plus:",
+          "features": ["Up to 100 staff accounts", "GH₵ 5,000 credit each month", "Scheduled staff shuttles", "Sustainability (ESG) reports"],
+          "prices": {
+            "monthly": { "amount": 6000, "customLabel": "", "period": "/month", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Billed monthly" },
+            "yearly": { "amount": 5100, "customLabel": "", "period": "/month", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Billed yearly" }
+          }
+        },
+        {
+          "id": "enterprise",
+          "name": "Corporate Enterprise",
+          "description": "For large organisations with custom needs.",
+          "popular": false,
+          "ctaLabel": "Talk to sales",
+          "ctaLink": "/contact?topic=partnerships",
+          "featuresTitle": "Everything in Plus, plus:",
+          "features": ["Unlimited staff accounts", "Custom credit and budgets", "Dedicated account manager", "Single sign-on and API access"],
+          "prices": {
+            "monthly": { "amount": null, "customLabel": "Custom", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Tailored to your organisation" },
+            "yearly": { "amount": null, "customLabel": "Custom", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Tailored to your organisation" }
+          }
+        },
+        {
+          "id": "franchise",
+          "name": "Yenko for Business",
+          "description": "Run Yenko as a franchise in your city or campus.",
+          "popular": false,
+          "ctaLabel": "Enquire",
+          "ctaLink": "/services/business",
+          "featuresTitle": "Includes:",
+          "features": ["Yenko brand and app", "Fleet and financing partners", "Training and operations playbooks", "Launch support on the ground"],
+          "prices": {
+            "monthly": { "amount": null, "customLabel": "Let’s talk", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Packages based on your market" },
+            "yearly": { "amount": null, "customLabel": "Let’s talk", "period": "", "includedQuantity": null, "includedUnit": "", "includedPer": "", "extraRate": null, "extraUnit": "", "note": "Packages based on your market" }
+          }
+        }
+      ],
+      "compare": [
+        {
+          "title": "Team mobility",
+          "rows": [
+            { "label": "Staff accounts", "values": ["25", "100", "Unlimited", false] },
+            { "label": "Monthly credit", "values": ["GH₵ 2,000", "GH₵ 5,000", "Custom", false] },
+            { "label": "Scheduled staff shuttles", "values": [false, true, true, false] },
+            { "label": "Monthly invoicing", "values": [true, true, true, false] },
+            { "label": "Sustainability reports", "values": [false, true, true, true] }
+          ]
+        },
+        {
+          "title": "Franchise",
+          "rows": [
+            { "label": "Rights to operate Yenko locally", "values": [false, false, false, true] },
+            { "label": "Fleet financing partners", "values": [false, false, false, true] },
+            { "label": "Training and playbooks", "values": [false, false, false, true] }
+          ]
+        },
+        {
+          "title": "Support",
+          "rows": [
+            { "label": "Dedicated account manager", "values": [false, false, true, true] },
+            { "label": "Single sign-on and API", "values": [false, false, true, false] }
+          ]
+        }
+      ]
+    }
+  ],
+  "addOns": [
+    { "label": "Pausing an e-bike ride", "amount": 0.25, "customLabel": "", "unit": "min", "note": "Lock the bike for a moment while you pop into a shop. Pay-as-you-go rides only." },
+    { "label": "Extra minutes on a pass", "amount": 0.3, "customLabel": "", "unit": "min", "note": "Only after 45 minutes on a Day Pass or Semester Pass ride." },
+    { "label": "Ending outside a parking zone", "amount": 10, "customLabel": "", "unit": "", "note": "Covers the cost of moving the bike back. Contact support within 48 hours if something stopped you." },
+    { "label": "Delivery waiting time", "amount": 1, "customLabel": "", "unit": "min", "note": "Only after the first 10 minutes waiting at pick-up or drop-off." }
+  ],
+  "paymentMethods": ["MTN MoMo", "Telecel Cash", "AT Money", "Visa and Mastercard debit cards"]
+}

@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+backend/vendor/
+
+# Environment
+.env
+
+# Database
+backend/database/*.sqlite
+backend/database/*.sqlite-*
+
+# Uploads (seed covers are copied back in by the seeder)
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+!backend/public/uploads/.htaccess
+
+# Build output
+frontend/dist/
+deploy/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+*.log

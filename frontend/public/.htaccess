@@ -1,0 +1,32 @@
+# Apache / LiteSpeed, production: serve the React app for every page URL (including the admin panel path),
+# while /api and /uploads go to the PHP backend.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Hidden files (e.g. deployment state) and the backend folder, if it was uploaded inside the web root.
+    # .well-known stays reachable for SSL certificate checks.
+    RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+    RewriteRule ^yenko-backend(/|$) - [F,L]
+
+    RewriteRule ^(api|uploads)(/|$) - [L]
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Always check for a new index.html so visitors get new releases straight away.
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+    # Built JS and CSS have a content hash in their names, so they can be cached for a year.
+    <FilesMatch "-[A-Za-z0-9_-]{8}\.(js|css)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>

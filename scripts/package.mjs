@@ -1,0 +1,174 @@
+// Builds a ready-to-upload copy of the site in deploy/ for a single domain on Apache or LiteSpeed hosting
+// (Hostinger, cPanel…). The GitHub Actions workflow runs this and uploads the result; see DEPLOYMENT.md.
+//
+//   deploy/public_html/    → your web root: the React site, /api entry point and /uploads
+//   deploy/yenko-backend/  → the PHP backend; upload it NEXT TO public_html (or inside it, as a fallback)
+//
+// Run with: npm run package
+import { spawnSync } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { join, relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { requirePhp, runComposer } from './lib/php.mjs';
+
+const root = fileURLToPath(new URL('..', import.meta.url));
+const backend = join(root, 'backend');
+const frontend = join(root, 'frontend');
+const deploy = join(root, 'deploy');
+const webRoot = join(deploy, 'public_html');
+const backendOut = join(deploy, 'yenko-backend');
+
+const step = (message) => console.log(`\n\x1b[1m→ ${message}\x1b[0m`);
+
+// In GitHub Actions there's no .env: VITE_ADMIN_PATH comes from the workflow environment instead.
+const env = existsSync(join(root, '.env')) ? readFileSync(join(root, '.env'), 'utf8') : '';
+const adminPath = process.env.VITE_ADMIN_PATH?.trim() || env.match(/^VITE_ADMIN_PATH=(.+)$/m)?.[1]?.trim() || '/login-yenkoadmin';
+
+step('Installing production PHP dependencies');
+runComposer(requirePhp(), ['install', '--no-dev', '--optimize-autoloader', '--no-interaction'], backend);
+
+step('Building the website');
+const build = spawnSync('npm run build', { cwd: frontend, stdio: 'inherit', shell: true });
+if (build.status !== 0) process.exit(build.status ?? 1);
+
+step('Assembling deploy/');
+// Empty deploy/ rather than deleting it: Windows refuses to remove a folder that an editor or Explorer has open.
+mkdirSync(deploy, { recursive: true });
+for (const entry of ['public_html', 'yenko-backend', 'README-DEPLOY.md']) {
+  rmSync(join(deploy, entry), { recursive: true, force: true });
+}
+
+// 1. Web root: the built site (including its .htaccess), the API entry point and uploads.
+cpSync(join(frontend, 'dist'), webRoot, { recursive: true });
+
+mkdirSync(join(webRoot, 'api'), { recursive: true });
+writeFileSync(
+  join(webRoot, 'api', 'index.php'),
+  `<?php
+
+// Forwards every /api request to the Yenko backend, which lives outside the web root.
+$entries = [
+    __DIR__ . '/../../yenko-backend/public/index.php', // yenko-backend next to public_html (recommended)
+    __DIR__ . '/../yenko-backend/public/index.php',    // yenko-backend inside public_html
+];
+
+foreach ($entries as $entry) {
+    if (is_file($entry)) {
+        require $entry;
+        return;
+    }
+}
+
+http_response_code(500);
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode(['error' => ['message' => 'The backend was not found. Upload the yenko-backend folder next to public_html.']]);
+`,
+);
+writeFileSync(
+  join(webRoot, 'api', '.htaccess'),
+  'Options -Indexes\n\n<IfModule mod_rewrite.c>\n    RewriteEngine On\n    RewriteCond %{REQUEST_FILENAME} !-f\n    RewriteRule ^ index.php [QSA,L]\n</IfModule>\n',
+);
+
+cpSync(join(backend, 'public', 'uploads'), join(webRoot, 'uploads'), { recursive: true });
+
+// 2. Backend: code, vendor and database scripts. No local database, uploads or secrets.
+const skip = [
+  join('public', 'uploads'),
+  join('public', 'router.php'),
+  '.env',
+];
+cpSync(backend, backendOut, {
+  recursive: true,
+  filter: (source) => {
+    const path = relative(backend, source);
+    if (!path) return true;
+    if (/\.sqlite(-\w+)?$/.test(path)) return false;
+    return !skip.some((excluded) => path === excluded || path.startsWith(excluded + sep));
+  },
+});
+
+// Safety net in case the backend folder is uploaded inside the web root.
+writeFileSync(
+  join(backendOut, '.htaccess'),
+  `<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
+`,
+);
+
+writeFileSync(
+  join(backendOut, '.env.example'),
+  `# Copy this file to .env on the server and fill it in.
+APP_ENV=production
+APP_DEBUG=false
+
+# SQLite needs no setup. For MySQL, set DB_DRIVER=mysql and fill in the DB_* values.
+DB_DRIVER=sqlite
+DB_SQLITE_PATH=database/yenko.sqlite
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+
+# A fresh random secret was generated for you. Keep it private.
+JWT_SECRET=${randomBytes(32).toString('hex')}
+JWT_TTL_MINUTES=480
+COOKIE_SECURE=true
+
+ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=
+
+UPLOAD_MAX_MB=5
+# Leave empty: uploads are saved to public_html/uploads automatically.
+UPLOAD_PATH=
+
+CORS_ALLOWED_ORIGINS=
+TRUST_PROXY=false
+`,
+);
+
+writeFileSync(
+  join(deploy, 'README-DEPLOY.md'),
+  `# Deploying Yenko Mobility by hand
+
+This folder was generated by \`npm run package\`. To deploy automatically from GitHub instead, see DEPLOYMENT.md in the project root.
+
+## What to upload
+
+| Folder | Upload to |
+|---|---|
+| \`public_html/\` | Your domain's web root. On Hostinger: \`domains/yourdomain.com/public_html\` |
+| \`yenko-backend/\` | The folder **above** the web root, next to \`public_html\` |
+
+If your host doesn't let you put files outside the web root, upload \`yenko-backend\` inside \`public_html\` instead. Its \`.htaccess\` blocks public access and the site finds it automatically.
+
+## Server requirements
+
+- Apache or LiteSpeed with \`mod_rewrite\`, HTTPS enabled
+- PHP 8.2+ with \`pdo_sqlite\` (or \`pdo_mysql\`), \`fileinfo\`, \`mbstring\` and \`openssl\`
+
+## Steps
+
+1. Upload both folders as described above. Delete any placeholder \`default.php\` or \`index.php\` from the web root.
+2. In \`yenko-backend/\`, copy \`.env.example\` to \`.env\`. Set \`ADMIN_EMAIL\` and a strong \`ADMIN_PASSWORD\`. A random \`JWT_SECRET\` is already filled in.
+3. On the server (SSH), run:
+   \`\`\`bash
+   cd yenko-backend
+   php database/migrate.php
+   php database/seed.php
+   \`\`\`
+4. Check \`https://yourdomain.com/api/health\` returns \`{"status":"ok"}\`.
+5. Open the website at \`https://yourdomain.com\` and the admin panel at \`https://yourdomain.com${adminPath}\`.
+
+To update the site later, run \`npm run package\` again and re-upload both folders. Keep the server's \`yenko-backend/.env\`, \`yenko-backend/database/yenko.sqlite\` and \`public_html/uploads/\`.
+`,
+);
+
+console.log(`\n\x1b[32mDone.\x1b[0m Upload the contents of deploy/ as described in deploy/README-DEPLOY.md`);
+console.log(`Admin panel will be at https://yourdomain.com${adminPath}\n`);
