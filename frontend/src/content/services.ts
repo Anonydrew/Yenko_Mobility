@@ -232,10 +232,10 @@ export const serviceCards = [
   {
     key: 'campus-rides',
     name: 'Campus e-bikes',
-    summary: 'Pedal-assist e-bikes on university campuses across Ghana.',
+    summary: 'Provides shared electric e-bicycles universities and communities.',
     to: '/products/e-bikes',
     image: media.eBike,
-    priceFrom: 'From GH₵ 2',
+    priceFrom: '',
     icon: BikeIcon,
   },
   ...services.map((service) => ({

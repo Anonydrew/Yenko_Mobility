@@ -1,11 +1,9 @@
-import CtaBanner from '@/components/sections/CtaBanner';
-import FeatureGrid from '@/components/sections/FeatureGrid';
-import SplitFeature from '@/components/sections/SplitFeature';
-import Button from '@/components/ui/Button';
-import Container from '@/components/ui/Container';
+import { Link } from 'react-router-dom';
+import { DownloadSection, ImagePair, IntroColumns, SplitSection, StatCards, TextCards } from '@/components/company/CompanyBlocks';
+import { ExploreSection } from '@/components/company/CompanyCarousel';
+import { CompanyHero, CompanyPage, CompanySection } from '@/components/company/CompanyLayout';
+import { darkButton, lightButton } from '@/components/company/styles';
 import { LeafIcon, MapPinIcon, ShieldIcon, WalletIcon } from '@/components/ui/icons';
-import Section from '@/components/ui/Section';
-import SectionHeading from '@/components/ui/SectionHeading';
 import { media } from '@/content/media';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
@@ -17,71 +15,67 @@ const pillars = [
 ];
 
 const goals = [
-  { value: '10', label: 'campuses across West Africa' },
-  { value: '1 million', label: 'rides every year' },
-  { value: '100%', label: 'of charging from renewable sources' },
-  { value: '500', label: 'local jobs' },
+  { value: '10', label: 'Campuses across West Africa' },
+  { value: '1 million', label: 'Rides every year' },
+  { value: '100%', label: 'Charging from renewable sources' },
+  { value: '500', label: 'Local jobs' },
 ];
 
 export default function Mission() {
-  useDocumentTitle('Our mission', 'Our mission is to give every student a quick, affordable and clean way to get around campus.');
+  useDocumentTitle('Our mission', 'Our mission is to give everyone a quick, affordable and clean way to get around, starting with every campus in Ghana.');
 
   return (
-    <>
-      <section>
-        <Container className="pb-16 pt-12 sm:pt-16 lg:pb-24 lg:pt-20">
-          <p className="text-sm font-medium text-ink-muted">Company · Our mission</p>
-          <h1 className="mt-6 max-w-5xl text-display-2xl font-bold">
-            Every student deserves an easy, affordable and clean way to <span className="rounded-2xl bg-brand px-3 text-onbrand [box-decoration-break:clone]">get around.</span>
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg text-ink-muted sm:text-xl">
-            Time spent walking in the heat or waiting for a shuttle is time taken from studying, sleeping and living. We’re here to give it back.
-          </p>
-        </Container>
-      </section>
+    <CompanyPage
+      hero={
+        <CompanyHero
+          eyebrow="Our mission"
+          title="Every student deserves an easy, affordable and clean way to get around."
+          intro="Time spent walking in the heat or waiting for a shuttle is time taken from studying, sleeping and living. We’re here to give it back."
+        />
+      }
+    >
+      <CompanySection>
+        <IntroColumns lead="We’re making getting around quick, affordable and clean, starting with every campus in Ghana.">
+          <p>Every Yenko trip replaces a car or taxi journey, lowers emissions and keeps money in local hands, through local jobs and local franchise partners.</p>
+        </IntroColumns>
+        <ImagePair images={[media.campus, media.riders]} />
+      </CompanySection>
 
-      <Section tone="muted">
-        <SectionHeading eyebrow="What guides us" title="Four promises to every rider." />
-        <div className="mt-12">
-          <FeatureGrid features={pillars} columns={4} cardTone="white" />
-        </div>
-      </Section>
+      <CompanySection eyebrow="What guides us" title="Four promises to every rider.">
+        <TextCards items={pillars} />
+      </CompanySection>
 
-      <Section>
-        <SplitFeature image={media.campus} eyebrow="Why campuses first?" title="Where short trips matter most.">
-          <p>
-            Universities are small cities with thousands of short, daily journeys: hostel to lecture, lecture to library, library to the market. They’re perfect for
-            e-bikes.
-          </p>
-          <p>
-            Working closely with each university means we can plan safe parking zones, respect campus rules and prove what shared electric transport can do, before
-            expanding into the surrounding community.
-          </p>
-        </SplitFeature>
-      </Section>
+      <SplitSection image={media.campus} eyebrow="Why campuses first?" title="Where short trips matter most.">
+        <p>
+          Universities are small cities with thousands of short, daily journeys: hostel to lecture, lecture to library, library to the market. They’re perfect for
+          e-bikes.
+        </p>
+        <p>
+          Working closely with each university means we can plan safe parking zones, respect campus rules and prove what shared electric transport can do, before
+          expanding into the surrounding community.
+        </p>
+      </SplitSection>
 
-      <Section>
-        <div className="rounded-5xl border border-line bg-surface-muted px-6 py-12 text-white sm:px-12 sm:py-16 lg:px-16">
-          <p className="text-sm font-medium text-white/60">Where we’re heading</p>
-          <h2 className="mt-3 max-w-2xl text-display-lg font-bold">Our goals for 2030.</h2>
-          <dl className="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            {goals.map((goal) => (
-              <div key={goal.label} className="flex flex-col-reverse border-t border-white/15 pt-5">
-                <dt className="mt-2 text-sm text-white/60">{goal.label}</dt>
-                <dd className="text-display-lg font-bold text-brand">{goal.value}</dd>
-              </div>
-            ))}
-          </dl>
-          <div className="mt-12 flex flex-wrap gap-3">
-            <Button to="/sustainability">Our sustainability impact</Button>
-            <Button to="/about" variant="secondary">
+      <CompanySection
+        eyebrow="Where we’re heading"
+        title="Our goals for 2030."
+        actions={
+          <>
+            <Link to="/sustainability" className={darkButton}>
+              Our sustainability impact
+            </Link>
+            <Link to="/about" className={lightButton}>
               About Yenko
-            </Button>
-          </div>
-        </div>
-      </Section>
+            </Link>
+          </>
+        }
+      >
+        <StatCards stats={goals} columns={4} />
+      </CompanySection>
 
-      <CtaBanner />
-    </>
+      <ExploreSection current="/mission" />
+
+      <DownloadSection />
+    </CompanyPage>
   );
 }
